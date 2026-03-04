@@ -1,0 +1,96 @@
+<div class="ct-root">
+{{!-- Toolbar (GM only) --}}
+{{#if isGM}}
+<div class="ct-toolbar">
+  <button type="button" data-action="createTimer" class="ct-btn ct-btn-primary">
+    <i class="fa-solid fa-plus"></i> New Timer
+  </button>
+  <button type="button" data-action="startAll" class="ct-btn ct-btn-start">
+    <i class="fa-solid fa-play"></i> Start All
+  </button>
+  <button type="button" data-action="pauseAll" class="ct-btn">
+    <i class="fa-solid fa-pause"></i> Pause All
+  </button>
+  <button type="button" data-action="resetAll" class="ct-btn">
+    <i class="fa-solid fa-rotate-left"></i> Reset All
+  </button>
+  <button type="button" data-action="deleteAll" class="ct-btn ct-btn-danger">
+    <i class="fa-solid fa-trash"></i> Remove All
+  </button>
+  <button type="button" data-action="exportTimers" class="ct-btn">
+    <i class="fa-solid fa-file-export"></i> Export
+  </button>
+  <button type="button" data-action="importTimers" class="ct-btn">
+    <i class="fa-solid fa-file-import"></i> Import
+  </button>
+  <input type="file" id="ct-import-file" accept=".json" style="display:none;" />
+</div>
+{{/if}}
+
+{{!-- Timer list --}}
+{{#if hasTimers}}
+<div class="ct-timer-list">
+  {{#each timers}}
+  <div class="ct-timer {{#if isExpired}}ct-expired{{/if}}{{#if gmOnly}} ct-gm-only{{/if}}"
+       data-timer-id="{{id}}">
+
+    <div class="ct-timer-header">
+      <span class="ct-timer-name">
+        {{#if gmOnly}}<i class="fa-solid fa-eye-slash ct-gm-icon" title="GM Only"></i>{{/if}}
+        {{name}}
+      </span>
+      <span class="ct-timer-time {{#if isRunning}}ct-running{{/if}}{{#if isExpired}} ct-expired-text{{/if}}">
+        {{displayTime}}
+      </span>
+    </div>
+
+    {{#if description}}
+    <div class="ct-timer-desc">{{description}}</div>
+    {{/if}}
+
+    {{#unless (eq mode "countup")}}
+    <div class="ct-progress-bar">
+      <div class="ct-progress-fill" style="width: {{progressPct}}%"></div>
+    </div>
+    {{/unless}}
+
+    {{#if isGM}}
+    <div class="ct-timer-controls">
+      {{#if isRunning}}
+      <button type="button" data-action="pauseTimer" class="ct-btn ct-btn-sm" title="Pause">
+        <i class="fa-solid fa-pause"></i>
+      </button>
+      {{else}}
+      <button type="button" data-action="startTimer" class="ct-btn ct-btn-sm ct-btn-start" title="Start"
+        {{#if isExpired}}disabled{{/if}}>
+        <i class="fa-solid fa-play"></i>
+      </button>
+      {{/if}}
+      <button type="button" data-action="resetTimer" class="ct-btn ct-btn-sm" title="Reset">
+        <i class="fa-solid fa-rotate-left"></i>
+      </button>
+      <button type="button" data-action="duplicateTimer" class="ct-btn ct-btn-sm" title="Duplicate">
+        <i class="fa-solid fa-copy"></i>
+      </button>
+      <button type="button" data-action="editTimer" class="ct-btn ct-btn-sm" title="Edit">
+        <i class="fa-solid fa-pen"></i>
+      </button>
+<button type="button" data-action="deleteTimer" class="ct-btn ct-btn-sm ct-btn-danger" title="Delete">
+        <i class="fa-solid fa-trash"></i>
+      </button>
+    </div>
+    {{/if}}
+
+  </div>
+  {{/each}}
+</div>
+{{else}}
+<div class="ct-empty">
+  {{#if isGM}}
+    No timers yet. Click <strong>New Timer</strong> to create one.
+  {{else}}
+    No timers are currently active.
+  {{/if}}
+</div>
+{{/if}}
+</div>
