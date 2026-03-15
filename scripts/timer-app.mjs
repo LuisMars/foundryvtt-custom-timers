@@ -123,7 +123,11 @@ export class TimerApp extends HandlebarsApplicationMixin(ApplicationV2) {
                       <strong>${t.name}</strong>
                       ${t.description ? `<div class="ct-chat-desc">${t.description}</div>` : ""}
                     </div>`;
-                  await ChatMessage.create({ content, speaker: ChatMessage.getSpeaker() });
+                  await ChatMessage.create({
+                    content,
+                    speaker: { alias: "Custom Timers" },
+                    ...(t.gmOnly ? { whisper: ChatMessage.getWhisperRecipients("GM") } : {}),
+                  });
                 }
               }
             }
@@ -417,7 +421,11 @@ export class TimerApp extends HandlebarsApplicationMixin(ApplicationV2) {
         <div class="ct-chat-state">${stateLabel}</div>
       </div>`;
 
-    await ChatMessage.create({ content, speaker: ChatMessage.getSpeaker() });
+    await ChatMessage.create({
+      content,
+      speaker: { alias: "Custom Timers" },
+      ...(timer.gmOnly ? { whisper: ChatMessage.getWhisperRecipients("GM") } : {}),
+    });
   }
 
   static _onExport(event, target) {

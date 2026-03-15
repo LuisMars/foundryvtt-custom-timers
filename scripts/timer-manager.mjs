@@ -35,7 +35,7 @@ export class TimerManager {
     await game.settings.set(MODULE_ID, SETTINGS_KEY, timers);
   }
 
-  static async createTimer({ name, description, mode, duration, gmOnly }) {
+  static async createTimer({ name, description, mode, duration, gmOnly, postOnComplete, reminders }) {
     const timers = TimerManager.getAllTimers();
     const timer = {
       id: foundry.utils.randomID(),
@@ -47,6 +47,8 @@ export class TimerManager {
       startedAt: null,
       state: "stopped",
       gmOnly: Boolean(gmOnly),
+      postOnComplete: postOnComplete !== false,
+      reminders: Array.isArray(reminders) ? reminders : [],
       createdAt: Date.now(),
     };
     timers.push(timer);
